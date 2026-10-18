@@ -1,0 +1,14 @@
+services:
+  build-mon:
+    build: .
+    container_name: build-mon
+    init: true
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"  # no dashboard login, so never expose beyond this machine
+    environment:
+      # LAN address so the key is used (Tailscale SSH on agents-home ignores keys)
+      BM_HOST: agents@192.168.0.117
+    volumes:
+      - ~/.ssh/id_ed25519_agents-home:/keys/id:ro
+      - ~/.ssh/known_hosts:/keys/known_hosts:ro
